@@ -26,8 +26,6 @@ def get_gqx(record, sample):
     :return: float
     """
     fmt = record.genotype(sample)
-    print(fmt)
-    print(record.QUAL)
     if hasattr(fmt.data, "GQ") and record.QUAL:
         return min(float(fmt.data.GQ), record.QUAL)
     elif hasattr(fmt.data, "GQ"):
