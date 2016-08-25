@@ -2,7 +2,13 @@ GVCF2BED
 ========
 
 This is a small tool to convert a gVCF file to BED.
-This is useful for extracting regions that pass a certain genotype quality threshold. 
+This is useful for extracting regions that pass a certain genotype quality threshold.
+ 
+
+## Installation
+
+gvcf2bed is now available through pypi with: 
+`pip install gvcf2bed` 
 
 
 ## Requirements
