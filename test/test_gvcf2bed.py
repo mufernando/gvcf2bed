@@ -39,15 +39,31 @@ class TestFunctions(object):
         tmp = BedLine("chr1", 500, 600)
         assert str(tmp) == "chr1\t500\t600"
 
+    def test_bedgraph_without_val(self):
+        tmp = BedGraphLine("chr1", 500, 600)
+        assert str(tmp) == "chr1\t500\t600\t0"
+
+    def test_bedgraph_with_val(self):
+        tmp = BedGraphLine("chr1", 500, 600, 10)
+        assert str(tmp) == "chr1\t500\t600\t10"
+
     def test_vcf2bed(self, mini_reader):
         records = [vcf_record_to_bed(x) for x in mini_reader]
         assert len(records) == 11
         assert str(records[0]) == "chr1\t156084708\t156084709"
 
+    def test_vcf2bedgraph(self, mini_reader):
+        records = [vcf_record_to_bed(x, True, 5) for x in mini_reader]
+        assert str(records[0]) == "chr1\t156084708\t156084709\t5"
+
     def test_vcf2bed_block(self, block_reader):
         records = [vcf_record_to_bed(x) for x in block_reader]
         assert len(records) == 10
         assert str(records[0]) == "chr1\t83880332\t83880428"
+
+    def test_vcf2bedgraph_bloc(self, block_reader):
+        records = [vcf_record_to_bed(x, True, 5) for x in block_reader]
+        assert str(records[0]) == "chr1\t83880332\t83880428\t5"
 
 
 

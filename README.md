@@ -25,7 +25,7 @@ gvcf2bed is now available through pypi with:
 ## Usage
 
 ```
-usage: gvcf2bed.py [-h] -I INPUT -O OUTPUT [-s SAMPLE] [-q QUALITY]
+usage: gvcf2bed [-h] -I INPUT -O OUTPUT [-s SAMPLE] [-q QUALITY] [-b]
 
 Create a BED file from a gVCF. Regions are based on a minimum genotype
 quality. The gVCF file must contain a GQ field in its FORMAT fields.
@@ -41,4 +41,6 @@ optional arguments:
                         sample (alphabetically) if not supplied
   -q QUALITY, --quality QUALITY
                         Minimum genotype quality (default 20)
+  -b, --bedgraph        Output in bedgraph mode
+
 ```
