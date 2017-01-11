@@ -46,6 +46,20 @@ def get_gqx(record, sample):
         return 0.0
 
 
+def is_variant(record):
+    """
+    Return true if record is a variant
+    Standard pyvcf `.is_snp` does not work correctly for
+    GATK's GVCF format
+    :param record: pyvcf record
+    :return:
+    """
+    alts = set(list(map(str, record.ALT)))
+    non_variant_alts = {".", "<NON_REF>"}
+    true_alts = alts - non_variant_alts
+    return len(true_alts) >= 1
+
+
 def vcf_record_to_bed(record, bedgraph=False, val=0):
     """
     Convert a VCF record to a BED record
@@ -68,6 +82,11 @@ def main():
     Create a BED file from a gVCF.
     Regions are based on a minimum genotype quality.
     The gVCF file must contain a GQ field in its FORMAT fields.
+
+    GQ scores of non-variants records have a different distribution
+    from the GQ score distribution of variant records.
+    Hence, an option is provided to set a different threshold for
+    non-variant positions.
     """
     parser = argparse.ArgumentParser(description=desc)
 
@@ -77,6 +96,8 @@ def main():
                                                                          "Will default to first sample "
                                                                          "(alphabetically) if not supplied")
     parser.add_argument("-q", "--quality", type=int, default=20, help="Minimum genotype quality (default 20)")
+    parser.add_argument("-nq", "--non-variant-quality", type=int, default=20,
+                        help="Minimum genotype quality for non-variant records (default 20)")
 
     parser.add_argument("-b", "--bedgraph", action="store_true", help="Output in bedgraph mode")
 
@@ -89,7 +110,8 @@ def main():
     with open(args.output, "w") as ohandle:
         for record in reader:
             gq = get_gqx(record, args.sample)
-            if gq >= args.quality:
+            is_v = is_variant(record)
+            if (is_v and gq >= args.quality) or (not is_v and gq >= args.non_variant_quality):
                 ohandle.write(str(vcf_record_to_bed(record, args.bedgraph, gq)) + "\n")
 
 if __name__ == "__main__":
