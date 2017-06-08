@@ -22,6 +22,17 @@ For developers
 -  pytest
 -  pytest-cov
 
+Changelog
+---------
+
+0.3
+~~~
+
+Use ``cyvcf2`` by default in tool. This results in a speed-up of
+approximately 8-10x.
+
+Exisitng API has not changed, and will still work with ``pyvcf``.
+
 Usage
 -----
 
