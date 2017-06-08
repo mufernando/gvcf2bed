@@ -11,6 +11,7 @@ gvcf2bed tool
 import argparse
 from collections import namedtuple
 import vcf
+import cyvcf2
 
 
 class BedLine(namedtuple("BedLine", ["chromosome", "start", "end"])):
@@ -44,6 +45,25 @@ def get_gqx(record, sample):
         return record.QUAL
     else:
         return 0.0
+
+
+def get_gqx_cyvcf(record, sample_idx):
+    """
+    Get GQX value from a cyvcf2 record
+    :param record: the record
+    :param sample_idx: sample index
+    :return: float
+    """
+    try:
+        gq_arr = record.format("GQ")
+    except KeyError:
+        if record.QUAL is not None:
+            return record.QUAL
+        return 0.0
+    if record.QUAL is not None:
+        return min(float(gq_arr[sample_idx][0]), record.QUAL)
+    else:
+        return gq_arr[sample_idx][0]
 
 
 def is_variant(record):
@@ -103,13 +123,15 @@ def main():
 
     args = parser.parse_args()
 
-    reader = vcf.Reader(filename=args.input)
+    reader = cyvcf2.VCF(args.input)
     if not args.sample:
-        args.sample = sorted(reader.samples)[0]
+        sample = 0
+    else:
+        sample = reader.samples.index(args.sample)
 
     with open(args.output, "w") as ohandle:
         for record in reader:
-            gq = get_gqx(record, args.sample)
+            gq = get_gqx_cyvcf(record, sample)
             is_v = is_variant(record)
             if (is_v and gq >= args.quality) or (not is_v and gq >= args.non_variant_quality):
                 ohandle.write(str(vcf_record_to_bed(record, args.bedgraph, gq)) + "\n")
