@@ -20,13 +20,25 @@ class BedLine(namedtuple("BedLine", ["chromosome", "start", "end"])):
         return "{0}\t{1}\t{2}".format(self.chromosome, self.start, self.end)
 
 
-class BedGraphLine(namedtuple("BedGraphLine", ["chromosome", "start", "end", "value"])):
+class BedGraphLine(namedtuple("BedGraphLine",
+                              ["chromosome", "start", "end", "value"])):
 
     def __new__(cls, chromosome, start, end, value=0):
-        return super(BedGraphLine, cls).__new__(cls, chromosome, start, end, value)
+        return super(BedGraphLine, cls).__new__(
+            cls,
+            chromosome,
+            start,
+            end,
+            value
+        )
 
     def __str__(self):
-        return "{0}\t{1}\t{2}\t{3}".format(self.chromosome, self.start, self.end, self.value)
+        return "{0}\t{1}\t{2}\t{3}".format(
+            self.chromosome,
+            self.start,
+            self.end,
+            self.value
+        )
 
 
 def get_gqx(record, sample):
@@ -90,7 +102,8 @@ def vcf_record_to_bed(record, bedgraph=False, val=0):
     """
     if "END" in record.INFO:
         if bedgraph:
-            return BedGraphLine(record.CHROM, record.start, record.INFO['END'], val)
+            return BedGraphLine(record.CHROM, record.start,
+                                record.INFO['END'], val)
         return BedLine(record.CHROM, record.start, record.INFO['END'])
     if bedgraph:
         return BedGraphLine(record.CHROM, record.start, record.end, val)
@@ -110,16 +123,23 @@ def main():
     """
     parser = argparse.ArgumentParser(description=desc)
 
-    parser.add_argument("-I", "--input", type=str, required=True, help="Input gVCF")
-    parser.add_argument("-O", "--output", type=str, required=True, help="Output bed file")
-    parser.add_argument("-s", "--sample", type=str, required=False, help="Sample name in VCF file to use. "
-                                                                         "Will default to first sample "
-                                                                         "(alphabetically) if not supplied")
-    parser.add_argument("-q", "--quality", type=int, default=20, help="Minimum genotype quality (default 20)")
+    parser.add_argument("-I", "--input", type=str,
+                        required=True, help="Input gVCF")
+    parser.add_argument("-O", "--output", type=str,
+                        required=True, help="Output bed file")
+    parser.add_argument("-s", "--sample", type=str,
+                        required=False,
+                        help="Sample name in VCF file to use. "
+                             "Will default to first sample "
+                             "(alphabetically) if not supplied")
+    parser.add_argument("-q", "--quality", type=int, default=20,
+                        help="Minimum genotype quality (default 20)")
     parser.add_argument("-nq", "--non-variant-quality", type=int, default=20,
-                        help="Minimum genotype quality for non-variant records (default 20)")
+                        help="Minimum genotype quality for "
+                             "non-variant records (default 20)")
 
-    parser.add_argument("-b", "--bedgraph", action="store_true", help="Output in bedgraph mode")
+    parser.add_argument("-b", "--bedgraph", action="store_true",
+                        help="Output in bedgraph mode")
 
     args = parser.parse_args()
 
@@ -133,8 +153,13 @@ def main():
         for record in reader:
             gq = get_gqx_cyvcf(record, sample)
             is_v = is_variant(record)
-            if (is_v and gq >= args.quality) or (not is_v and gq >= args.non_variant_quality):
-                ohandle.write(str(vcf_record_to_bed(record, args.bedgraph, gq)) + "\n")
+            if (is_v and gq >= args.quality) or \
+                    (not is_v and gq >= args.non_variant_quality):
+                ohandle.write(str(vcf_record_to_bed(
+                    record,
+                    args.bedgraph,
+                    gq
+                )) + "\n")
 
 if __name__ == "__main__":
     main()
