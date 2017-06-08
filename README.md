@@ -26,10 +26,10 @@ gvcf2bed is now available through pypi with:
 
 ### 0.3 
 
-Use `cyvcf2` by default in tool. This results in a speed-up of approximately
-8-10x. 
-
-Exisitng API has not changed, and will still work with `pyvcf`.
+* Use `cyvcf2` by default in tool. This results in a speed-up of approximately
+8-10x. Exisitng API has not changed, and will still work with `pyvcf`.
+* Add separate filter for non-variants, as GQ scores may have a different
+distribution on non-variant records than on variant records.
 
 
 ## Usage
