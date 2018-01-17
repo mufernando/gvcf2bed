@@ -56,7 +56,7 @@ def get_gqx(record, sample):
     elif record.QUAL:
         return record.QUAL
     else:
-        return 0.0
+        return None
 
 
 def get_gqx_cyvcf(record, sample_idx):
@@ -71,7 +71,7 @@ def get_gqx_cyvcf(record, sample_idx):
     except KeyError:
         if record.QUAL is not None:
             return record.QUAL
-        return 0.0
+        return None
     if record.QUAL is not None and gq_arr is not None:
         return min(float(gq_arr[sample_idx][0]), record.QUAL)
     elif gq_arr is not None:
@@ -79,7 +79,7 @@ def get_gqx_cyvcf(record, sample_idx):
     elif record.QUAL is not None:
         return record.QUAL
     else:
-        return 0.0
+        return None
 
 
 def is_variant(record):
@@ -156,6 +156,8 @@ def main():
     with open(args.output, "w") as ohandle:
         for record in reader:
             gq = get_gqx_cyvcf(record, sample)
+            if gq is None:
+                continue
             is_v = is_variant(record)
             if (is_v and gq >= args.quality) or \
                     (not is_v and gq >= args.non_variant_quality):
