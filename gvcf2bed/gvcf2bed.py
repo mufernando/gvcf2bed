@@ -72,10 +72,14 @@ def get_gqx_cyvcf(record, sample_idx):
         if record.QUAL is not None:
             return record.QUAL
         return 0.0
-    if record.QUAL is not None:
+    if record.QUAL is not None and gq_arr is not None:
         return min(float(gq_arr[sample_idx][0]), record.QUAL)
-    else:
+    elif gq_arr is not None:
         return gq_arr[sample_idx][0]
+    elif record.QUAL is not None:
+        return record.QUAL
+    else:
+        return 0.0
 
 
 def is_variant(record):

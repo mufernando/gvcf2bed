@@ -9,6 +9,7 @@ gvcf2bed tests
 import vcf
 import pytest
 from gvcf2bed import *
+import cyvcf2
 
 
 @pytest.fixture()
@@ -22,6 +23,17 @@ def block_reader():
     reader = vcf.Reader(filename="test/data/block.vcf")
     return reader
 
+@pytest.fixture()
+def cy_mini_reader():
+    reader = cyvcf2.VCF("test/data/mini.vcf")
+    return reader
+
+
+@pytest.fixture()
+def cy_block_reader():
+    reader = cyvcf2.VCF("test/data/block.vcf")
+    return reader
+
 
 class TestFunctions(object):
 
@@ -32,6 +44,16 @@ class TestFunctions(object):
 
     def test_gqx_block(self, block_reader):
         gqx = [get_gqx(x, "Sample_01") for x in block_reader]
+        assert len(gqx) == 10
+        assert gqx == [3.0, 5.0, 3.0, 2.0, 3.0, 2.0, 3.0, 2.0, 3.0, 2.0]
+
+    def test_cy_gqx_mini(self, cy_mini_reader):
+        gqx = [get_gqx_cyvcf(x, 0) for x in cy_mini_reader]
+        assert len(gqx) == 11
+        assert gqx == [20.0, 21.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0]
+
+    def test_cy_gqx_block(self, cy_block_reader):
+        gqx = [get_gqx_cyvcf(x, 0) for x in cy_block_reader]
         assert len(gqx) == 10
         assert gqx == [3.0, 5.0, 3.0, 2.0, 3.0, 2.0, 3.0, 2.0, 3.0, 2.0]
 
