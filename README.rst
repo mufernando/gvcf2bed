@@ -25,6 +25,11 @@ For developers
 Changelog
 ---------
 
+0.3.1
+~~~~~
+
+-  Fix a bug for variants where GQ is not defined.
+
 0.3
 ~~~
 

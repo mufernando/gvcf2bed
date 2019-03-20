@@ -9,7 +9,7 @@ setup.py
 """
 from os.path import abspath, dirname, join
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 readme_file = join(abspath(dirname(__file__)), "README.rst")
 with open(readme_file) as desc_handle:
@@ -17,14 +17,14 @@ with open(readme_file) as desc_handle:
 
 setup(
     name="gvcf2bed",
-    version="0.3",
+    version="0.3.1",
     description="Convert gVCF into BED",
     long_description=long_desc,
     author="Sander Bollen",
     author_email="a.h.b.bollen@lumc.nl",
     url="https://github.com/sndrtj/gvcf2bed",
     license="MIT",
-    packages=["gvcf2bed"],
+    packages=find_packages(),
     install_requires=["pyvcf==0.6.8", "cyvcf2>=0.7.4"],
     test_requires=["pytest", "pytest-cov"],
     entry_points={

@@ -24,6 +24,10 @@ gvcf2bed is now available through pypi with:
 
 ## Changelog
 
+### 0.3.1
+
+* Fix a bug for variants where GQ is not defined.
+
 ### 0.3 
 
 * Use `cyvcf2` by default in tool. This results in a speed-up of approximately
