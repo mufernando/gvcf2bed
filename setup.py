@@ -17,7 +17,7 @@ with open(readme_file) as desc_handle:
 
 setup(
     name="gvcf2bed",
-    version="0.3.1",
+    version="0.4.0-dev",
     description="Convert gVCF into BED",
     long_description=long_desc,
     author="Sander Bollen",
