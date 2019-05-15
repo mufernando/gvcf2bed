@@ -1,3 +1,5 @@
+[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/gvcf2bed/README.html)
+
 GVCF2BED
 ========
 
@@ -7,8 +9,17 @@ This is useful for extracting regions that pass a certain genotype quality thres
 
 ## Installation
 
+### PyPI
+
 gvcf2bed is now available through pypi with: 
-`pip install gvcf2bed` 
+`pip install gvcf2bed`
+
+
+### Conda
+
+```bash
+conda install -c bioconda gvcf2bed
+``` 
 
 
 ## Requirements
