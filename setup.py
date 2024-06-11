@@ -25,8 +25,8 @@ setup(
     url="https://github.com/sndrtj/gvcf2bed",
     license="MIT",
     packages=find_packages(),
-    install_requires=["pyvcf==0.6.8", "cyvcf2>=0.7.4"],
-    test_requires=["pytest", "pytest-cov"],
+    install_requires=["cyvcf2>=0.7.4"],
+    test_requires=[],
     entry_points={
         "console_scripts": [
             "gvcf2bed = gvcf2bed.gvcf2bed:main"
